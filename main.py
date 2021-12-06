@@ -8,7 +8,7 @@ app = Flask(__name__)
 def main(request):
     sta = request.args.get('sta', default=None, type=str)
     if not sta:
-        return redirect('/')
+        return 'test'
     response = jsonify(fujisan(sta))
     response.headers.add('Access-Control-Allow-Origin', 'https://psyaro.github.io')
     return response
