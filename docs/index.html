@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>お前の最寄りから富士山みえんの？</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style>
+      body{background-color: rgb(229, 233, 253);}
+    </style>
+
+  </head>        
+  <body>
+    <div class="container">
+      <div class="col-sm-12 col-md-12">
+        <h3>駅</h3>
+        <div class="form-group">
+          <label>駅</label>
+          <input type="text" id="sta" class="form-control" value="東京">
+          <button id="submit" class="form-control btn btn-primary">送信</button>      
+        </div>
+        <h3>回答部</h3>
+        <p id="ans" style="font-size: large;"></p>
+      </div>
+    <footer>
+      このサイトはGoogle アナリティクスを使用していません。
+    </footer>
+    <script>
+      $('#submit').on('click', function(){
+        $.ajax({
+          url: 'https://us-central1-awesome-terra-234810.cloudfunctions.net/fujisan-api',
+          type: 'GET',
+          dataType: 'json',
+          data: {
+            orig: $('#orig').val(),
+            dest: $('#dest').val()
+          },
+          timeout: 5000,
+        })
+        .done(function(data) {
+          $('#ans').text(data.msg)
+        }).fail(function(data){
+          $('#ans').text('駅名が存在しないなどのエラー')
+        })
+      })
+    </script>  
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>よしよし</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style>
+      body{background-color: rgb(229, 233, 253);}
+    </style>
+
+  </head>        
+  <body>
+    <div class="container">
+      <div class="col-sm-12 col-md-12">
+        <h3>駅</h3>
+        <div class="form-group">
+          <label>駅１</label>
+          <input type="text" id="orig" class="form-control" value="東京">
+          <label>駅２</label>
+          <input type="text" id="dest" class="form-control" value="町田">
+          <button id="submit" class="form-control btn btn-primary">送信</button>      
+        </div>
+        <h3>回答部</h3>
+        <p id="ans"></p>
+      </div>
+    <footer>
+      このサイトはGoogle アナリティクスを使用していません。
+    </footer>
+    <script>
+      $('#submit').on('click', function(){
+        $.ajax({
+          url: '',
+          type: 'GET',
+          dataType: 'json',
+          data: {
+            orig: $('#orig').val(),
+            dest: $('#dest').val()
+          },
+          timeout: 5000,
+        })
+        .done(function(data) {
+          $('#ans').text(data.dist)
+        })
+      })
+    </script>  
+  </body>
+</html>

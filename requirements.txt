@@ -1,0 +1,7 @@
+pandas
+numpy
+flask
+flask-cors
+pymap3d
+requests
+geopandas
