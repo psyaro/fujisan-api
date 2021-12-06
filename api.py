@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import geopandas as gpd
 import pymap3d as pm
+import os
 
 def get_elev(lon, lat):
     x = 'http://cyberjapandata2.gsi.go.jp/general/dem/scripts/getelevation.php'
@@ -9,7 +10,8 @@ def get_elev(lon, lat):
     return res['elevation']
 
 def getstainfo(staname):
-    sta = pd.read_csv('all_stations.csv')
+    x = os.path.dirname(__file__)
+    sta = pd.read_csv(x + '/all_stations.csv')
     sta = gpd.GeoDataFrame(sta, geometry=gpd.points_from_xy(sta.x, sta.y), crs=2451).to_crs(4612)
     sta = sta.sort_values('tokyo')
     ans = sta[sta.station == staname].geometry.values[0]
