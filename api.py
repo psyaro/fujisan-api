@@ -17,15 +17,12 @@ def getstainfo(staname):
     ans = sta[sta.station == staname].geometry.values[0]
     return ans
 
-def fujisan(staname):
-    lat_Fuji = 35.360556 # [deg]
-    lon_Fuji = 138.727778 # [deg]
-    alt_Fuji = 3776 # 楕円体高 [m]
+def fujisan(lat=35.360556, lon=138.727778, alt=3776, staname='追浜'):
     ans = getstainfo(staname)
     lon_Kokyo, lat_Kokyo = ans.x, ans.y
     alt_Kokyo = get_elev(ans.x, ans.y)
     x,y,z = pm.geodetic2ecef(lat_Kokyo, lon_Kokyo, alt_Kokyo)
-    az,el,range = pm.geodetic2aer(lat_Fuji, lon_Fuji, alt_Fuji, lat_Kokyo, lon_Kokyo, alt_Kokyo)
+    az,el,range = pm.geodetic2aer(lat, lon, alt, lat_Kokyo, lon_Kokyo, alt_Kokyo)
     msg = 'みえる！' if el > 0 else 'みえない(ノω･､)うぅ…'
     detail = "ECEF座標 : %d [m], %d [m], %d [m]" % (x, y, z) + \
         "\n方位角 = %.1f [deg], 仰角 = %.1f [deg], 直線距離 = %.1f [m]" % (az, el, range)
