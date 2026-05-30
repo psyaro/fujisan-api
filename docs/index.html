@@ -1,47 +1,1245 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja">
   <head>
-    <title>お前の最寄りから富士山みえんの？</title>
+    <meta charset="utf-8">
+    <title>Fuji-Sightline | 最寄り駅からの富士山眺望幾何学シミュレータ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@300;400;600&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-      body{background-color: rgb(229, 233, 253);}
-    </style>
+      :root {
+        --bg-visible: linear-gradient(135deg, rgba(251, 146, 60, 0.15) 0%, rgba(244, 63, 94, 0.15) 100%);
+        --border-visible: rgba(244, 63, 94, 0.4);
+        --glow-visible: 0 0 20px rgba(244, 63, 94, 0.25);
+        
+        --bg-invisible: linear-gradient(135deg, rgba(71, 85, 105, 0.2) 0%, rgba(30, 41, 59, 0.4) 100%);
+        --border-invisible: rgba(148, 163, 184, 0.25);
+        --glow-invisible: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      }
 
-  </head>        
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: linear-gradient(-45deg, #090d16, #111827, #1e1b4b, #2e1065, #090d16);
+        background-size: 400% 400%;
+        animation: gradientBG 18s ease infinite;
+        color: #f1f5f9;
+        font-family: 'Outfit', 'Noto Sans JP', 'Inter', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow-x: hidden;
+      }
+
+      @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .container {
+        max-width: 640px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 40px 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 35px;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: -0.05em;
+        margin-bottom: 10px;
+        background: linear-gradient(to right, #ff7e5f, #feb47b, #ff7eb9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 2px 8px rgba(255, 126, 95, 0.2));
+      }
+
+      .subtitle {
+        font-size: 0.95rem;
+        color: #94a3b8;
+        font-weight: 300;
+      }
+
+      /* ガラスモルフィズムカード */
+      .glass-card {
+        background: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 28px;
+        padding: 30px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        margin-bottom: 30px;
+      }
+
+      /* 検索フォーム */
+      .form-group {
+        position: relative;
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #cbd5e1;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        gap: 10px;
+      }
+
+      input[type="text"] {
+        flex-grow: 1;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 16px 20px;
+        color: #fff;
+        font-size: 1.1rem;
+        font-family: inherit;
+        outline: none;
+        transition: all 0.3s;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+      }
+
+      input[type="text"]:focus {
+        border-color: #ff7e5f;
+        box-shadow: 0 0 15px rgba(255, 126, 95, 0.25), inset 0 2px 4px rgba(0,0,0,0.2);
+      }
+
+      button {
+        background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+        border: none;
+        border-radius: 16px;
+        color: #0f172a;
+        font-size: 1.05rem;
+        font-weight: 700;
+        padding: 0 28px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 15px rgba(255, 126, 95, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 126, 95, 0.45);
+        filter: brightness(1.05);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      /* オートコンプリート */
+      .suggestions-list {
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        right: 0;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        max-height: 250px;
+        overflow-y: auto;
+        list-style: none;
+        z-index: 100;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        display: none;
+      }
+
+      .suggestions-list li {
+        padding: 14px 20px;
+        cursor: pointer;
+        transition: background 0.2s;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 1rem;
+        color: #e2e8f0;
+      }
+
+      .suggestions-list li:last-child {
+        border-bottom: none;
+      }
+
+      .suggestions-list li:hover, .suggestions-list li.active {
+        background: rgba(255, 126, 95, 0.2);
+        color: #fff;
+      }
+
+      /* ローディング */
+      .loader {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+        text-align: center;
+      }
+
+      .loader-mountain {
+        width: 80px;
+        height: 60px;
+        margin-bottom: 20px;
+        animation: pulse 1.8s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.6; }
+        50% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 15px rgba(255, 126, 95, 0.5)); }
+      }
+
+      .loader-text {
+        font-size: 0.95rem;
+        color: #94a3b8;
+        font-weight: 300;
+        letter-spacing: 0.05em;
+      }
+
+      /* 結果エリア */
+      .result-area {
+        display: none;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .result-area.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* 結果カード */
+      .status-badge {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+      }
+
+      .status-badge.visible {
+        background: rgba(244, 63, 94, 0.15);
+        color: #fb7185;
+        border: 1px solid rgba(244, 63, 94, 0.3);
+      }
+
+      .status-badge.invisible {
+        background: rgba(148, 163, 184, 0.1);
+        color: #94a3b8;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .result-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 12px;
+        line-height: 1.3;
+      }
+
+      .result-title.visible {
+        background: linear-gradient(to right, #ff7e5f, #ff7eb9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .result-title.invisible {
+        color: #cbd5e1;
+      }
+
+      .result-desc {
+        color: #94a3b8;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 25px;
+      }
+
+      /* 2カラムレイアウト（コンパス ＆ 詳細スペック） */
+      .result-details {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 25px;
+        margin-bottom: 25px;
+      }
+
+      @media (min-width: 480px) {
+        .result-details {
+          grid-template-columns: 1.2fr 1.8fr;
+          align-items: center;
+        }
+      }
+
+      /* コンパスUI */
+      .compass-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(15, 23, 42, 0.4);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .compass-label {
+        font-size: 0.75rem;
+        color: #64748b;
+        font-weight: 600;
+        margin-top: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .compass-svg-wrapper {
+        position: relative;
+        width: 140px;
+        height: 140px;
+      }
+
+      .compass-needle {
+        transform-origin: 70px 70px;
+        transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      /* スペックリスト */
+      .specs-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .spec-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .spec-item:last-child {
+        border-bottom: none;
+      }
+
+      .spec-label {
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+
+      .spec-value {
+        font-weight: 600;
+        color: #e2e8f0;
+        font-size: 0.95rem;
+      }
+
+      /* パノラマシミュレータ */
+      .simulator-container {
+        background: rgba(15, 23, 42, 0.45);
+        border-radius: 24px;
+        padding: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.05);
+      }
+
+      .simulator-title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #ff7e5f;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .simulator-screen {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        background: #090d16;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        height: 200px;
+        width: 100%;
+      }
+
+      .simulator-screen svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .sim-fuji-group {
+        transform-origin: 200px 110px;
+        transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .simulator-info {
+        margin-top: 14px;
+        font-size: 0.85rem;
+        color: #94a3b8;
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      /* 警告表示 */
+      .warning-box {
+        display: none;
+        background: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.25);
+        border-radius: 18px;
+        padding: 16px 20px;
+        margin-bottom: 25px;
+        align-items: flex-start;
+        gap: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .warning-box.show {
+        display: flex;
+      }
+      
+      .warning-icon {
+        color: #f59e0b;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      
+      .warning-content {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        color: #fcd34d;
+      }
+
+      /* ユーモアセクション */
+      .fun-section {
+        background: rgba(15, 23, 42, 0.5);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .fun-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #ff7e5f;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .fun-text {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #cbd5e1;
+      }
+
+      .analogy-tag {
+        display: inline-block;
+        background: rgba(255, 126, 95, 0.1);
+        color: #ffb09c;
+        border: 1px solid rgba(255, 126, 95, 0.2);
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        margin: 6px 6px 0 0;
+      }
+
+      /* フッター */
+      footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 0.75rem;
+        color: #475569;
+        font-weight: 300;
+        letter-spacing: 0.02em;
+        border-top: 1px solid rgba(255, 255, 255, 0.02);
+      }
+
+      /* スクロールバー */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.3);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 126, 95, 0.3);
+      }
+
+      /* 拡大モーダルスタイル */
+      .sim-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(9, 13, 22, 0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        padding: 20px;
+      }
+
+      .sim-modal.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      .sim-modal-content {
+        max-width: 900px;
+        width: 100%;
+        position: relative;
+        transform: scale(0.93);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .sim-modal.show .sim-modal-content {
+        transform: scale(1);
+      }
+
+      .sim-modal-close {
+        position: absolute;
+        top: -55px;
+        right: 0px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
+        font-size: 1.8rem;
+        line-height: 1;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        padding: 0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .sim-modal-close:hover {
+        background: rgba(255, 126, 95, 0.25);
+        border-color: #ff7e5f;
+        transform: rotate(90deg);
+        box-shadow: 0 0 15px rgba(255, 126, 95, 0.4);
+      }
+
+      .sim-modal-screen-wrapper {
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+        background: #090d16;
+      }
+
+      .sim-modal .simulator-screen {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+        height: 450px;
+        width: 100%;
+      }
+
+      @media (max-width: 768px) {
+        .sim-modal .simulator-screen {
+          height: 350px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .sim-modal .simulator-screen {
+          height: 250px;
+        }
+      }
+
+      /* モーダル表示中は body のスクロールを無効化 */
+      body.modal-open {
+        overflow: hidden;
+      }
+
+      .sim-modal .simulator-info {
+        color: #e2e8f0;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 20px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        text-align: left;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(8px);
+      }
+
+      /* 通常のシミュレータスクリーンへのホバーエフェクト（クリック可能であることを示す） */
+      .simulator-screen {
+        cursor: zoom-in;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .simulator-screen:hover {
+        transform: translateY(-2px) scale(1.005);
+        border-color: rgba(255, 126, 95, 0.3);
+        box-shadow: 0 12px 30px rgba(255, 126, 95, 0.12);
+      }
+    </style>
+  </head>
   <body>
     <div class="container">
-      <div class="col-sm-12 col-md-12">
-        <h3>駅</h3>
+      <header>
+        <h1>Fuji-Sightline</h1>
+        <p class="subtitle">地球の曲率と標高から描く幾何学的眺望解析</p>
+      </header>
+
+      <div class="glass-card">
+        <!-- 検索フォーム -->
         <div class="form-group">
-          <label>駅</label>
-          <input type="text" id="sta" class="form-control" value="東京">
-          <button id="submit" class="form-control btn btn-primary">送信</button>      
+          <label for="sta-input">最寄り駅名を入力</label>
+          <div class="input-wrapper">
+            <input type="text" id="sta-input" placeholder="例: 東京、追浜、町田..." autocomplete="off" value="東京">
+            <button id="submit-btn">
+              <span>判定</span>
+            </button>
+          </div>
+          <!-- オートコンプリートの候補リスト -->
+          <ul id="suggestions" class="suggestions-list"></ul>
         </div>
-        <h3>回答部</h3>
-        <p id="ans" style="font-size: large;"></p>
+
+        <!-- ローディング表示 -->
+        <div id="loader" class="loader">
+          <!-- 富士山SVGアニメーション -->
+          <svg class="loader-mountain" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5L15 75H85L50 5Z" fill="url(#mountGrad)" stroke="rgba(255, 255, 255, 0.15)" stroke-width="2"/>
+            <path d="M50 5L38 31H62L50 5Z" fill="#FFFFFF"/>
+            <defs>
+              <linearGradient id="mountGrad" x1="50" y1="5" x2="50" y2="75" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="#1e1b4b" stop-opacity="0.9"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <p class="loader-text">富士山との高低差・地球の曲率を計算中...</p>
+        </div>
+
+        <!-- 結果表示エリア -->
+        <div id="result" class="result-area">
+          <div style="text-align: center;">
+            <span id="status-badge" class="status-badge">判定結果</span>
+          </div>
+          <h2 id="result-title" class="result-title">ここに結果</h2>
+          <p id="result-desc" class="result-desc">ここに説明文</p>
+
+          <div class="result-details">
+            <!-- コンパス -->
+            <div class="compass-container">
+              <div class="compass-svg-wrapper">
+                <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+                  <!-- 外枠 -->
+                  <circle cx="70" cy="70" r="64" fill="rgba(15, 23, 42, 0.6)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="2"/>
+                  <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" stroke-dasharray="4, 4"/>
+                  <!-- 方角の文字 -->
+                  <text x="70" y="24" fill="#cbd5e1" font-size="10" font-weight="700" text-anchor="middle">N</text>
+                  <text x="118" y="74" fill="#cbd5e1" font-size="10" font-weight="700" text-anchor="middle">E</text>
+                  <text x="70" y="124" fill="#cbd5e1" font-size="10" font-weight="700" text-anchor="middle">S</text>
+                  <text x="22" y="74" fill="#cbd5e1" font-size="10" font-weight="700" text-anchor="middle">W</text>
+                  
+                  <!-- 指針（回転する針） -->
+                  <g id="compass-needle" class="compass-needle">
+                    <line x1="70" y1="70" x2="70" y2="28" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="70" y1="70" x2="70" y2="112" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" stroke-linecap="round"/>
+                    <polygon points="70,22 66,32 74,32" fill="#ef4444" />
+                    <circle cx="70" cy="70" r="6" fill="#f8fafc" stroke="#ef4444" stroke-width="2"/>
+                  </g>
+                </svg>
+              </div>
+              <span class="compass-label">富士山の方角 (方位角)</span>
+            </div>
+
+            <!-- スペック詳細 -->
+            <div class="specs-list">
+              <div class="spec-item">
+                <span class="spec-label">直線距離</span>
+                <span id="spec-dist" class="spec-value">- km</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">方位角（北基準）</span>
+                <span id="spec-az" class="spec-value">- °</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">仰角</span>
+                <span id="spec-el" class="spec-value">- °</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">最寄り駅の標高</span>
+                <span id="spec-alt" class="spec-value">- m</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 投影誤差の警告 -->
+          <div id="warning-box" class="warning-box">
+            <svg class="warning-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.84a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <div class="warning-content">
+              <strong>座標投影誤差の警告:</strong><br>
+              この駅は東京付近の座標原点（平面直角座標系第IX系）から遠く離れているため、座標投影時の幾何学的な歪みにより、駅の計算上の位置に若干の誤差（数メートル〜数十メートル程度）が含まれている可能性があります。
+            </div>
+          </div>
+
+          <!-- パノラマシミュレータ -->
+          <div id="simulator-container" class="simulator-container" style="margin-bottom: 25px;">
+            <div class="simulator-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 21h20"/><path d="M2 17l5-5 4 4 6-6 5 5"/>
+              </svg>
+              富士山パノラマ・シルエットシミュレータ
+            </div>
+            <div id="simulator-screen" class="simulator-screen" title="クリックして拡大表示">
+              <div id="simulator-screen-inner" style="width: 100%; height: 100%;">
+                <svg id="fuji-sim-svg" width="100%" height="100%" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#070a13"/>
+                    <stop offset="60%" stop-color="#111827"/>
+                    <stop offset="100%" stop-color="#1e1b4b"/>
+                  </linearGradient>
+                  <linearGradient id="fujiGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#818cf8"/>
+                    <stop offset="100%" stop-color="#1e1b4b"/>
+                  </linearGradient>
+                </defs>
+                
+                <!-- 背景の空 -->
+                <rect x="0" y="0" width="400" height="200" fill="url(#skyGrad)"/>
+                
+                <!-- 角度ガイドライン (水平線・目盛り線) -->
+                <g opacity="0.15">
+                  <line x1="0" y1="74.1" x2="400" y2="74.1" stroke="#ffffff" stroke-width="1" stroke-dasharray="2, 4"/>
+                  <text x="390" y="70" fill="#ffffff" font-size="8" text-anchor="end">+5.0°</text>
+                  
+                  <line x1="0" y1="111.1" x2="400" y2="111.1" stroke="#ffffff" stroke-width="1" stroke-dasharray="2, 4"/>
+                  <text x="390" y="107" fill="#ffffff" font-size="8" text-anchor="end">+2.5°</text>
+                  
+                  <line x1="0" y1="185.2" x2="400" y2="185.2" stroke="#ffffff" stroke-width="1" stroke-dasharray="2, 4"/>
+                  <text x="390" y="181" fill="#ffffff" font-size="8" text-anchor="end">-2.5°</text>
+                  
+                  <text x="390" y="12" fill="#ffffff" font-size="8" text-anchor="end">+10.0°</text>
+                  <text x="390" y="197" fill="#ffffff" font-size="8" text-anchor="end">-3.5°</text>
+                </g>
+                
+                <!-- 動的追加：方位角目盛り線コンテナ -->
+                <g id="sim-az-ticks"></g>
+                
+                <!-- 富士山グループ (物理パス) -->
+                <g id="sim-fuji-group">
+                  <!-- 1. 隠れている部分を含めた全体像の透過破線 -->
+                  <path id="sim-fuji-dashed" d="" fill="none" stroke="rgba(129, 140, 248, 0.7)" stroke-width="1.5" stroke-dasharray="3, 3"/>
+                  <!-- 2. 地平線の上に見える実体 -->
+                  <path id="sim-fuji-solid" d="" fill="url(#fujiGrad)"/>
+                </g>
+                
+                <!-- 大地 (地平線 0.0° Y=148.1px に完全固定) -->
+                <g id="sim-earth-group">
+                  <rect id="sim-earth-mask" x="0" y="148.1" width="400" height="51.9" fill="#090d16" opacity="0.7"/>
+                  <line id="sim-horizon-line" x1="0" y1="148.1" x2="400" y2="148.1" stroke="#ff7e5f" stroke-width="1.5" stroke-dasharray="4, 3"/>
+                  <text id="sim-horizon-text" x="10" y="143" fill="#ffb09c" font-size="9" font-weight="600">地平線 (仰角 0.0°)</text>
+                </g>
+                
+                <!-- インライン数値・ラベル表示 -->
+                <g opacity="0.85">
+                  <text id="sim-label-left" x="15" y="22" fill="#cbd5e1" font-size="10" font-weight="700">-</text>
+                  <text id="sim-label-right" x="385" y="22" fill="#ff7e5f" font-size="10" font-weight="700" text-anchor="end">-</text>
+                </g>
+              </svg>
+              </div>
+            </div>
+            <div id="simulator-info" class="simulator-info">
+              <!-- シミュレーション結果のテキストが入る -->
+            </div>
+          </div>
+
+          <!-- おもしろ要素・追加情報 -->
+          <div id="fun-section" class="fun-section">
+            <h3 class="fun-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              おもしろ情報
+            </h3>
+            <p id="fun-text" class="fun-text">おもしろ情報がここに表示されます。</p>
+            <div id="analogies-container" style="margin-top: 15px;"></div>
+          </div>
+        </div>
       </div>
+    </div>
+
     <footer>
       このサイトはGoogle アナリティクスを使用していません。
     </footer>
+
+    <!-- 拡大表示用モーダル (Lightbox) -->
+    <div id="sim-modal" class="sim-modal">
+      <div class="sim-modal-content">
+        <button id="sim-modal-close" class="sim-modal-close" title="閉じる">&times;</button>
+        <div class="sim-modal-screen-wrapper">
+          <div id="sim-modal-screen" class="simulator-screen"></div>
+        </div>
+        <div id="sim-modal-info" class="simulator-info"></div>
+      </div>
+    </div>
+
+    <!-- ピュアJavaScript実装 -->
     <script>
-      $('#submit').on('click', function(){
-        $.ajax({
-          url: 'https://us-central1-awesome-terra-234810.cloudfunctions.net/fujisan-api-3',
-          type: 'GET',
-          dataType: 'json',
-          data: {
-            sta: $('#sta').val()
-          },
-          timeout: 5000,
-        })
-        .done(function(data) {
-          $('#ans').text(data.msg)
-        }).fail(function(data){
-          $('#ans').text('駅名が存在しないなどのエラー')
-        })
-      })
-    </script>  
+      const submitBtn = document.getElementById('submit-btn');
+      const staInput = document.getElementById('sta-input');
+      const suggestions = document.getElementById('suggestions');
+      const loader = document.getElementById('loader');
+      const resultArea = document.getElementById('result');
+      const statusBadge = document.getElementById('status-badge');
+      const resultTitle = document.getElementById('result-title');
+      const resultDesc = document.getElementById('result-desc');
+      const compassNeedle = document.getElementById('compass-needle');
+      
+      const specDist = document.getElementById('spec-dist');
+      const specAz = document.getElementById('spec-az');
+      const specEl = document.getElementById('spec-el');
+      const specAlt = document.getElementById('spec-alt');
+      const funText = document.getElementById('fun-text');
+      const analogiesContainer = document.getElementById('analogies-container');
+      
+      // 新規追加：シミュレータ＆警告用のDOM要素
+      const warningBox = document.getElementById('warning-box');
+      const simFujiGroup = document.getElementById('sim-fuji-group');
+      const simFujiDashed = document.getElementById('sim-fuji-dashed');
+      const simFujiSolid = document.getElementById('sim-fuji-solid');
+      const simEarthMask = document.getElementById('sim-earth-mask');
+      const simHorizonLine = document.getElementById('sim-horizon-line');
+      const simHorizonText = document.getElementById('sim-horizon-text');
+      const simLabelLeft = document.getElementById('sim-label-left');
+      const simLabelRight = document.getElementById('sim-label-right');
+      const simulatorInfo = document.getElementById('simulator-info');
+
+      let allStations = [];
+      let activeSuggestionIndex = -1;
+
+      // 開発環境 (localhost/127.0.0.1) と本番環境 (GitHub Pages 等) の自動検知
+      const isLocal = ['localhost', '127.0.0.1', ''].includes(window.location.hostname);
+      
+      // TODO: デプロイ完了後、以下のURLを Google Cloud Functions の本番用APIトリガーURLに書き換えてください。
+      const productionApiUrl = 'https://asia-northeast1-awesome-terra-234810.cloudfunctions.net/fujisan-api';
+      
+      const apiBaseUrl = isLocal ? '/api' : productionApiUrl;
+
+      // 起動時に駅リストを取得
+      async function loadStations() {
+        try {
+          const response = await fetch(`${apiBaseUrl}/stations`);
+          if (response.ok) {
+            allStations = await response.json();
+          }
+        } catch (error) {
+          console.error('駅リストのロードに失敗しました:', error);
+        }
+      }
+      loadStations();
+
+      // オートコンプリートの入力イベント
+      staInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        suggestions.innerHTML = '';
+        activeSuggestionIndex = -1;
+        
+        if (!query) {
+          suggestions.style.display = 'none';
+          return;
+        }
+
+        // 入力クエリに部分一致する候補をフィルタリング（最大8件）
+        const filtered = allStations
+          .filter(station => station.includes(query))
+          .slice(0, 8);
+
+        if (filtered.length === 0) {
+          suggestions.style.display = 'none';
+          return;
+        }
+
+        filtered.forEach((station, index) => {
+          const li = document.createElement('li');
+          li.textContent = station;
+          li.addEventListener('click', function() {
+            staInput.value = station;
+            suggestions.style.display = 'none';
+            performSearch();
+          });
+          suggestions.appendChild(li);
+        });
+
+        suggestions.style.display = 'block';
+      });
+
+      // キーボードナビゲーション
+      staInput.addEventListener('keydown', function(e) {
+        const items = suggestions.querySelectorAll('li');
+        if (suggestions.style.display === 'none' || items.length === 0) return;
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          activeSuggestionIndex = (activeSuggestionIndex + 1) % items.length;
+          updateActiveSuggestion(items);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          activeSuggestionIndex = (activeSuggestionIndex - 1 + items.length) % items.length;
+          updateActiveSuggestion(items);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (activeSuggestionIndex >= 0) {
+            staInput.value = items[activeSuggestionIndex].textContent;
+            suggestions.style.display = 'none';
+            performSearch();
+          } else {
+            suggestions.style.display = 'none';
+            performSearch();
+          }
+        } else if (e.key === 'Escape') {
+          suggestions.style.display = 'none';
+        }
+      });
+
+      function updateActiveSuggestion(items) {
+        items.forEach((item, index) => {
+          if (index === activeSuggestionIndex) {
+            item.classList.add('active');
+            item.scrollIntoView({ block: 'nearest' });
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      }
+
+      // ドキュメントクリックで候補を閉じる
+      document.addEventListener('click', function(e) {
+        if (e.target !== staInput && e.target !== suggestions) {
+          suggestions.style.display = 'none';
+        }
+      });
+
+      // 判定処理の呼び出し
+      async function performSearch() {
+        const stationName = staInput.value.trim();
+        if (!stationName) return;
+
+        // 表示のリセット
+        resultArea.classList.remove('show');
+        loader.style.display = 'flex';
+        submitBtn.disabled = true;
+
+        try {
+          const response = await fetch(`${apiBaseUrl}/?sta=${encodeURIComponent(stationName)}`);
+          if (!response.ok) throw new Error('API応答エラー');
+          const data = await response.json();
+
+          // 結果の描画
+          renderResult(data);
+        } catch (error) {
+          console.error(error);
+          renderError();
+        } finally {
+          loader.style.display = 'none';
+          submitBtn.disabled = false;
+        }
+      }
+
+      // 結果描画ロジック
+      function renderResult(data) {
+        const visible = data.visible;
+        
+        // 警告ボックスの表示切替
+        if (data.imprecise) {
+          warningBox.classList.add('show');
+        } else {
+          warningBox.classList.remove('show');
+        }
+
+        // バッジの設定
+        statusBadge.textContent = visible ? 'みえる！' : 'みえない...';
+        statusBadge.className = `status-badge ${visible ? 'visible' : 'invisible'}`;
+
+        // タイトルの設定
+        if (visible) {
+          resultTitle.textContent = `祝！ ${data.station_name}駅から富士山が見えます！`;
+          resultTitle.className = 'result-title visible';
+          resultDesc.innerHTML = `幾何学的な計算上、富士山までの直線視線が通っています。<br><small style="color: #64748b; display: block; margin-top: 8px; line-height: 1.4;">※このシミュレーションは地球の曲率（丸み）と標高差のみを計算しており、駅周辺の建物・ビルや、中間に存在する他の山（丹沢連峰など）による遮蔽は考慮していません。周囲が開けており、視線上に物理的な障害物がない場合に限ります。</small>`;
+        } else {
+          resultTitle.textContent = `残念... ${data.station_name}駅から富士山は見えません`;
+          resultTitle.className = 'result-title invisible';
+          resultDesc.innerHTML = `地球の丸み（地平線の曲率）や周囲の標高差に遮られ、幾何学的に視線が通りません。<br><small style="color: #64748b; display: block; margin-top: 8px; line-height: 1.4;">※周囲の建物や他の山による遮蔽の有無に関わらず、幾何学的に視界の上限を超えています。</small>`;
+        }
+
+        // スペックの設定
+        specDist.textContent = `${data.distance_km} km`;
+        specAz.textContent = `${Math.round(data.data[0])} °`;
+        specEl.textContent = `${Number(data.data[1]).toFixed(2)} °`;
+        specAlt.textContent = `${data.station_alt} m`;
+
+        // コンパス針の回転
+        const az = data.data[0];
+        compassNeedle.style.transform = `rotate(${az}deg)`;
+
+        // === パノラマ・シルエットシミュレータの動的物理描画 ===
+        const el = data.data[1]; // 山頂の仰角
+        const el_bottom = data.el_bottom; // 麓の仰角
+        const dist = data.distance_km;
+
+        // 1. 縦軸のマッピング (仰角-3.5°〜+10.0°を0px〜200pxに。1度あたり deg_to_px px)
+        // 全幅 13.5度。上端 Y=0px が +10.0°、地平線 Y_horizon が 0.0°。
+        const deg_to_px = 200 / 13.5;
+        const Y_horizon = 10.0 * deg_to_px; // 148.148 px
+        
+        const Y_top = Y_horizon - deg_to_px * el;
+        const Y_bottom = Y_horizon - deg_to_px * el_bottom;
+        
+        // 2. アスペクト比を維持した見かけの横幅 (px) の算出 (1度=deg_to_px px, 山麓26km/山頂1kmモデル)
+        const W = 22070 / dist;
+        const W_top = 849 / dist;
+
+        const X_left = 200 - W / 2;
+        const X_right = 200 + W / 2;
+        const X_top_left = 200 - W_top / 2;
+        const X_top_right = 200 + W_top / 2;
+
+        const cp1_x = X_left + W * 0.35;
+        const cp1_y = Y_bottom;
+        const cp2_x = X_top_left - W_top * 0.5;
+        const cp2_y = Y_top + (Y_bottom - Y_top) * 0.4;
+        
+        const cp3_x = X_top_right + W_top * 0.5;
+        const cp3_y = Y_top + (Y_bottom - Y_top) * 0.4;
+        const cp4_x = X_right - W * 0.35;
+        const cp4_y = Y_bottom;
+
+        const fujiPath = `M ${X_left},${Y_bottom} C ${cp1_x},${cp1_y} ${cp2_x},${cp2_y} ${X_top_left},${Y_top} L ${X_top_right},${Y_top} C ${cp3_x},${cp3_y} ${cp4_x},${cp4_y} ${X_right},${Y_bottom} Z`;
+
+        // 3. パスを適用
+        simFujiDashed.setAttribute('d', fujiPath);
+        
+        if (visible) {
+          simFujiSolid.style.display = 'block';
+          simFujiSolid.setAttribute('d', fujiPath);
+        } else {
+          simFujiSolid.style.display = 'none';
+        }
+
+        // 4. 方位角メモリの動的生成 (絶対方位、5度刻み、1度=deg_to_px px)
+        const azTicksGroup = document.getElementById('sim-az-ticks');
+        let azTicksHtml = '';
+        
+        let normAz = az % 360;
+        if (normAz < 0) normAz += 360;
+        
+        // 視野角の範囲 (全横幅 400px, 1度 = deg_to_px px なので左右に 200/deg_to_px 度)
+        const viewHalfAngle = 200 / deg_to_px; // 13.5度
+        const minAngle = normAz - viewHalfAngle;
+        const maxAngle = normAz + viewHalfAngle;
+        
+        const startTick = Math.ceil(minAngle / 5) * 5;
+        const endTick = Math.floor(maxAngle / 5) * 5;
+        
+        for (let t = startTick; t <= endTick; t++) {
+          const tickX = 200 + (t - normAz) * deg_to_px;
+          
+          let displayAngle = t % 360;
+          if (displayAngle < 0) displayAngle += 360;
+          
+          azTicksHtml += `
+            <line x1="${tickX}" y1="0" x2="${tickX}" y2="200" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" stroke-dasharray="2, 4" />
+            <text x="${tickX}" y="190" fill="rgba(255, 255, 255, 0.4)" font-size="8.5" font-weight="600" text-anchor="middle">${displayAngle}°</text>
+          `;
+        }
+        azTicksGroup.innerHTML = azTicksHtml;
+
+        // 5. インラインのプロット表示
+        simLabelLeft.textContent = `${data.station_name}駅`;
+        const sign = el >= 0 ? '+' : '';
+        simLabelRight.textContent = `方位: ${Math.round(az)}° / 仰角: ${sign}${el.toFixed(2)}°`;
+
+        // 6. シミュレータ解説テキストの更新
+        const P = data.visible_percent;
+        if (visible) {
+          simulatorInfo.innerHTML = `<strong>物理シミュレーション解説:</strong> 富士山は地平線（仰角0.0°）の上に **${P}%** 露出して見えています。<br>山頂の仰角は **${sign}${el.toFixed(2)}°**、山麓の仰角は **${el_bottom.toFixed(2)}°** です（見かけの横幅: **${(W/deg_to_px).toFixed(1)}°**）。`;
+        } else {
+          simulatorInfo.innerHTML = `<strong>物理シミュレーション解説:</strong> 地球の曲率により、富士山は地平線（仰角0.0°）の下に完全に沈んでいます。<br>山頂は地平線より **${Math.abs(el).toFixed(2)}°** 低い位置にあり、見えるためにはあと **${data.required_alt_diff.toLocaleString()}m** の標高が必要です。`;
+        }
+
+        // おもしろ＆雑学テキストの構築
+        analogiesContainer.innerHTML = '';
+        if (visible) {
+          funText.innerHTML = `富士山との<strong>仰角は ${Number(data.data[1]).toFixed(2)}度</strong>です。晴れた日には、富士山が美しく聳え立つ姿を拝むことができるでしょう。<br><br>富士山までの直線距離 <strong>${data.distance_km}km</strong> は、例えるなら...`;
+        } else {
+          funText.innerHTML = `地球が丸いために、約 <strong>${data.required_alt_diff.toLocaleString()} メートル</strong>分の「大地の壁（地平線）」に富士山が遮られてしまっています。<br><br><strong>💡 仮想シミュレーション:</strong><br>もしも富士山があと <strong>${data.required_alt_diff.toLocaleString()} m</strong> 高く、標高が <strong>${(3776 + data.required_alt_diff).toLocaleString()} m</strong> になれば、${data.station_name}駅からギリギリ地平線越しに拝むことが可能でした！<br><br>ちなみに、富士山までの直線距離 <strong>${data.distance_km}km</strong> は、例えるなら...`;
+        }
+
+        // 距離のたとえを表示
+        if (data.analogies && data.analogies.length > 0) {
+          data.analogies.forEach(analogy => {
+            const span = document.createElement('span');
+            span.className = 'analogy-tag';
+            span.textContent = analogy;
+            analogiesContainer.appendChild(span);
+          });
+        }
+
+        // フェードイン表示
+        resultArea.style.display = 'block';
+        setTimeout(() => {
+          resultArea.classList.add('show');
+        }, 50);
+      }
+
+      // エラー時の処理
+      function renderError() {
+        warningBox.classList.remove('show');
+        statusBadge.textContent = 'エラー';
+        statusBadge.className = 'status-badge invisible';
+        resultTitle.textContent = '駅が見つかりませんでした';
+        resultTitle.className = 'result-title invisible';
+        resultDesc.textContent = '入力された駅名が存在しないか、うまくデータを取得できませんでした。駅名をもう一度ご確認ください。';
+        
+        specDist.textContent = '-';
+        specAz.textContent = '-';
+        specEl.textContent = '-';
+        specAlt.textContent = '-';
+        compassNeedle.style.transform = 'rotate(0deg)';
+        
+        // シミュレータのリセット
+        simFujiDashed.setAttribute('d', '');
+        simFujiSolid.setAttribute('d', '');
+        document.getElementById('sim-az-ticks').innerHTML = '';
+        simLabelLeft.textContent = '-';
+        simLabelRight.textContent = '-';
+        simulatorInfo.textContent = '駅データを読み込むと、ここに物理シルエットが表示されます。';
+
+        funText.textContent = 'ひらがな、漢字の両方で正しく入力されているか確認してください。（サジェスト一覧から選択すると確実です）';
+        analogiesContainer.innerHTML = '';
+
+        resultArea.style.display = 'block';
+        setTimeout(() => {
+          resultArea.classList.add('show');
+        }, 50);
+      }
+
+      // 送信クリックとエンターキー
+      submitBtn.addEventListener('click', performSearch);
+
+      // === シミュレータの拡大モーダル (Lightbox) 制御ロジック ===
+      const simModal = document.getElementById('sim-modal');
+      const simModalClose = document.getElementById('sim-modal-close');
+      const simModalScreen = document.getElementById('sim-modal-screen');
+      const simModalInfo = document.getElementById('sim-modal-info');
+      const normalScreen = document.getElementById('simulator-screen');
+      const normalScreenInner = document.getElementById('simulator-screen-inner');
+      const fujiSimSvg = document.getElementById('fuji-sim-svg');
+
+      // 拡大表示
+      function openModal() {
+        document.body.classList.add('modal-open');
+        simModal.style.display = 'flex';
+        // infoテキストのクローン
+        simModalInfo.innerHTML = simulatorInfo.innerHTML;
+        // SVGをモーダル内に移動
+        simModalScreen.appendChild(fujiSimSvg);
+        
+        // アニメーション用のクラス付与（フェードイン）
+        setTimeout(() => {
+          simModal.classList.add('show');
+        }, 10);
+      }
+
+      // 縮小（閉じる）
+      function closeModal() {
+        simModal.classList.remove('show');
+        document.body.classList.remove('modal-open');
+        
+        // アニメーション完了後に非表示＆DOMの復元
+        setTimeout(() => {
+          simModal.style.display = 'none';
+          // SVGを元の場所に戻す
+          normalScreenInner.appendChild(fujiSimSvg);
+        }, 400); // CSSのtransition 0.4sに合わせる
+      }
+
+      // イベントリスナー
+      normalScreen.addEventListener('click', openModal);
+      simModalClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeModal();
+      });
+      simModal.addEventListener('click', (e) => {
+        if (e.target === simModal) {
+          closeModal();
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && simModal.classList.contains('show')) {
+          closeModal();
+        }
+      });
+    </script>
   </body>
 </html>

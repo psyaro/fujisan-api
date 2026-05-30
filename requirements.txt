@@ -5,3 +5,6 @@ flask-cors
 pymap3d
 requests
 geopandas
+astropy
+shapely
+python-dotenv
