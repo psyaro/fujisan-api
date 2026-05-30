@@ -4,6 +4,21 @@
     <meta charset="utf-8">
     <title>Fuji-Sightline | 最寄り駅からの富士山眺望幾何学シミュレータ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- OGP / SNS Meta Tags -->
+    <meta property="og:title" content="Fuji-Sightline | 最寄り駅からの富士山眺望幾何学シミュレータ">
+    <meta property="og:description" content="駅からの直線距離、標高、地球の丸みを考慮し、幾何学的に富士山が見えるかシミュレーションします。地平線下の透過シルエット表示やクリック拡大機能も搭載。">
+    <meta property="og:image" content="https://psyaro.github.io/fujisan-api/ogp.png">
+    <meta property="og:url" content="https://psyaro.github.io/fujisan-api/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Fuji-Sightline">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fuji-Sightline | 最寄り駅からの富士山眺望幾何学シミュレータ">
+    <meta name="twitter:description" content="駅からの直線距離、標高、地球の丸みを考慮し、幾何学的に富士山が見えるかシミュレーションします。">
+    <meta name="twitter:image" content="https://psyaro.github.io/fujisan-api/ogp.png">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -636,6 +651,84 @@
         border-color: rgba(255, 126, 95, 0.3);
         box-shadow: 0 12px 30px rgba(255, 126, 95, 0.12);
       }
+
+      /* SNS共有セクションのスタイリング */
+      .share-section {
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: center;
+      }
+
+      .share-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .share-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .share-btn {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        color: #e2e8f0;
+        padding: 12px 24px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: none;
+      }
+
+      .share-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      }
+
+      .share-btn:active {
+        transform: translateY(0);
+      }
+
+      .share-icon {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+      }
+
+      .x-btn:hover {
+        background: #ffffff;
+        color: #090d16;
+        border-color: #ffffff;
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+      }
+
+      .copy-btn:hover {
+        background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+        color: #090d16;
+        border-color: transparent;
+        box-shadow: 0 8px 25px rgba(255, 126, 95, 0.25);
+      }
+
+      .native-btn:hover {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #ffffff;
+        border-color: transparent;
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
+      }
     </style>
   </head>
   <body>
@@ -825,6 +918,25 @@
             <p id="fun-text" class="fun-text">おもしろ情報がここに表示されます。</p>
             <div id="analogies-container" style="margin-top: 15px;"></div>
           </div>
+
+          <!-- SNS共有セクション -->
+          <div class="share-section">
+            <p class="share-title">結果をシェアする</p>
+            <div class="share-buttons">
+              <button id="share-x-btn" class="share-btn x-btn">
+                <svg class="share-icon" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                Xでポスト
+              </button>
+              <button id="share-copy-btn" class="share-btn copy-btn">
+                <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                結果をコピー
+              </button>
+              <button id="share-native-btn" class="share-btn native-btn" style="display: none;">
+                <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                他のアプリで共有
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -865,6 +977,11 @@
       
       // 新規追加：シミュレータ＆警告用のDOM要素
       const warningBox = document.getElementById('warning-box');
+
+      // 新規追加：SNS共有ボタン用のDOM要素
+      const shareXBtn = document.getElementById('share-x-btn');
+      const shareCopyBtn = document.getElementById('share-copy-btn');
+      const shareNativeBtn = document.getElementById('share-native-btn');
       const simFujiGroup = document.getElementById('sim-fuji-group');
       const simFujiDashed = document.getElementById('sim-fuji-dashed');
       const simFujiSolid = document.getElementById('sim-fuji-solid');
@@ -1145,6 +1262,61 @@
           });
         }
 
+        // === SNS共有ボタンの設定 ===
+        const shareBaseUrl = isLocal ? window.location.origin + window.location.pathname : 'https://psyaro.github.io/fujisan-api/';
+        const shareUrl = `${shareBaseUrl}?sta=${encodeURIComponent(data.station_name)}`;
+        
+        let shareText = '';
+        if (visible) {
+          shareText = `🎉【Fuji-Sightline】${data.station_name}駅から富士山が見えます！\n幾何学シミュレーション結果：見える（山体の約 ${P}% が露出）\n直線距離：${data.distance_km} km | 仰角：${sign}${el.toFixed(2)}°\n地球の丸みを超えて、視線が届いています！\n#FujiSightline #富士山眺望\n`;
+        } else {
+          shareText = `😢【Fuji-Sightline】${data.station_name}駅から富士山は見えません...\n幾何学シミュレーション結果：見えない（大地の壁に遮断）\n直線距離：${data.distance_km} km | 仰角：${el.toFixed(2)}°\n見えるには、あと ${data.required_alt_diff.toLocaleString()}m 分の標高が必要です。\n#FujiSightline #富士山眺望\n`;
+        }
+
+        // X (Twitter) ポスト
+        shareXBtn.onclick = function() {
+          const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+          window.open(xUrl, '_blank', 'noopener,noreferrer');
+        };
+
+        // 結果テキスト＆URLのコピー
+        shareCopyBtn.onclick = async function() {
+          try {
+            await navigator.clipboard.writeText(`${shareText}${shareUrl}`);
+            const originalText = shareCopyBtn.innerHTML;
+            shareCopyBtn.innerHTML = `
+              <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              コピーしました！
+            `;
+            setTimeout(() => {
+              shareCopyBtn.innerHTML = originalText;
+            }, 1500);
+          } catch (err) {
+            console.error('コピーに失敗しました:', err);
+            alert('コピーに失敗しました。お手数ですが手動でコピーしてください。');
+          }
+        };
+
+        // Web Share API (ネイティブ共有)
+        if (navigator.share) {
+          shareNativeBtn.style.display = 'inline-flex';
+          shareNativeBtn.onclick = async function() {
+            try {
+              await navigator.share({
+                title: 'Fuji-Sightline | 富士山眺望幾何学シミュレータ',
+                text: shareText,
+                url: shareUrl
+              });
+            } catch (err) {
+              if (err.name !== 'AbortError') {
+                console.error('共有に失敗しました:', err);
+              }
+            }
+          };
+        } else {
+          shareNativeBtn.style.display = 'none';
+        }
+
         // フェードイン表示
         resultArea.style.display = 'block';
         setTimeout(() => {
@@ -1238,6 +1410,16 @@
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && simModal.classList.contains('show')) {
           closeModal();
+        }
+      });
+
+      // URLパラメータの確認と自動検索実行
+      window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const sta = params.get('sta');
+        if (sta) {
+          staInput.value = sta;
+          performSearch();
         }
       });
     </script>
