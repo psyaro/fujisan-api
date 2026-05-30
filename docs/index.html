@@ -882,7 +882,7 @@
       const isLocal = ['localhost', '127.0.0.1', ''].includes(window.location.hostname);
       
       // TODO: デプロイ完了後、以下のURLを Google Cloud Functions の本番用APIトリガーURLに書き換えてください。
-      const productionApiUrl = 'https://asia-northeast1-awesome-terra-234810.cloudfunctions.net/fujisan-api';
+      const productionApiUrl = 'https://asia-northeast1-awesome-terra-234810.cloudfunctions.net/fujisan-api/api';
       
       const apiBaseUrl = isLocal ? '/api' : productionApiUrl;
 
